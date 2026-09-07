@@ -1,0 +1,27 @@
+{% extends "crm/base.html" %}
+
+{% block title %}Companies · Ties{% endblock %}
+
+{% block content %}
+<h1>Companies</h1>
+<a href="{% url 'crm:company_create' %}" class="button-link" style="float:right;">+ Add company</a>
+<br><br>
+
+{% if companies %}
+<table>
+  <thead><tr><th>Name</th><th>Industry</th><th>Website</th><th>People</th></tr></thead>
+  <tbody>
+    {% for c in companies %}
+    <tr>
+      <td><a href="{% url 'crm:company_detail' c.pk %}">{{ c.name }}</a></td>
+      <td>{{ c.industry|default:"—" }}</td>
+      <td>{% if c.website %}<a href="{{ c.website }}" target="_blank">{{ c.website }}</a>{% else %}—{% endif %}</td>
+      <td>{{ c.memberships.count }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">No companies yet.</p>
+{% endif %}
+{% endblock %}

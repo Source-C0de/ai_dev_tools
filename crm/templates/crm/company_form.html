@@ -1,0 +1,18 @@
+{% extends "crm/base.html" %}
+
+{% block title %}New company · Ties{% endblock %}
+
+{% block content %}
+<nav class="breadcrumbs">
+  <a href="{% url 'crm:company_list' %}">Companies</a> / New
+</nav>
+
+<h1>Add a company</h1>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Save</button>
+  <a href="{% url 'crm:company_list' %}" style="margin-left: 1rem;">Cancel</a>
+</form>
+{% endblock %}

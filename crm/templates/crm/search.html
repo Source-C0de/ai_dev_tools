@@ -1,0 +1,56 @@
+{% extends "crm/base.html" %}
+
+{% block title %}Search · Ties{% endblock %}
+
+{% block content %}
+<h1>Search & filter</h1>
+
+<form method="get" action="{% url 'crm:search' %}">
+  <p>
+    <label>Tag</label>
+    <select name="tag">
+      <option value="">— any —</option>
+      {% for t in all_tags %}
+        <option value="{{ t.name }}" {% if request.GET.tag == t.name %}selected{% endif %}>{{ t.name }}</option>
+      {% endfor %}
+    </select>
+  </p>
+  <p>
+    <label>Company</label>
+    <select name="company">
+      <option value="">— any —</option>
+      {% for c in all_companies %}
+        <option value="{{ c.pk }}" {% if request.GET.company == c.pk|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>
+      {% endfor %}
+    </select>
+  </p>
+  <p>
+    <label>Recent (days)</label>
+    <input type="number" name="recent" min="1" value="{{ request.GET.recent|default:'' }}" placeholder="e.g. 30">
+  </p>
+  <button type="submit">Apply</button>
+  <a href="{% url 'crm:search' %}" style="margin-left: 1rem;">Reset</a>
+</form>
+
+<hr>
+
+{% if applied %}
+  <p class="meta">Filters: {% for k, v in applied %}<span class="pill">{{ k }}={{ v }}</span>{% endfor %}</p>
+{% endif %}
+
+<p>{{ people.count }} result{{ people.count|pluralize }}.</p>
+
+{% if people %}
+<table>
+  <thead><tr><th>Name</th><th>Tags</th></tr></thead>
+  <tbody>
+    {% for p in people %}
+    <tr>
+      <td><a href="{% url 'crm:person_detail' p.pk %}">{{ p.name }}</a></td>
+      <td>{% for t in p.tags.all %}<span class="tag">{{ t.name }}</span>{% endfor %}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}

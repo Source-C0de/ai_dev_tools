@@ -1,0 +1,14 @@
+{% extends "crm/base.html" %}
+
+{% block title %}Log interaction · Ties{% endblock %}
+
+{% block content %}
+<h1>Log an interaction</h1>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Save</button>
+  <a href="{% url 'crm:person_list' %}" style="margin-left: 1rem;">Cancel</a>
+</form>
+{% endblock %}

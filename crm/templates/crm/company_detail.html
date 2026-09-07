@@ -1,0 +1,26 @@
+{% extends "crm/base.html" %}
+
+{% block title %}{{ company.name }} · Ties{% endblock %}
+
+{% block content %}
+<nav class="breadcrumbs">
+  <a href="{% url 'crm:company_list' %}">Companies</a> / {{ company.name }}
+</nav>
+
+<h1>{{ company.name }}</h1>
+<p class="meta">
+  {% if company.industry %}{{ company.industry }}{% endif %}
+  {% if company.website %} &middot; <a href="{{ company.website }}" target="_blank">{{ company.website }}</a>{% endif %}
+</p>
+
+<h3>People</h3>
+{% if memberships %}
+  <ul>
+    {% for m in memberships %}
+      <li><a href="{% url 'crm:person_detail' m.person.pk %}">{{ m.person.name }}</a>{% if m.role %} — {{ m.role }}{% endif %}</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="muted">No people linked yet.</p>
+{% endif %}
+{% endblock %}

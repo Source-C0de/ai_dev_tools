@@ -1,0 +1,52 @@
+{% extends "crm/base.html" %}
+
+{% block title %}{{ person.name }} · Ties{% endblock %}
+
+{% block content %}
+<nav class="breadcrumbs">
+  <a href="{% url 'crm:person_list' %}">People</a> / {{ person.name }}
+</nav>
+
+<h1>{{ person.name }}</h1>
+<p class="meta">
+  {% if person.email %}{{ person.email }}{% endif %}
+  {% if person.phone %} &middot; {{ person.phone }}{% endif %}
+</p>
+
+{% if person.notes %}
+  <p>{{ person.notes|linebreaksbr }}</p>
+{% endif %}
+
+<h3>Tags</h3>
+<p>
+  {% for t in person.tags.all %}<span class="tag">{{ t.name }}</span>{% empty %}<span class="muted">No tags.</span>{% endfor %}
+</p>
+
+<h3>Companies</h3>
+{% if memberships %}
+  <ul>
+    {% for m in memberships %}
+      <li><a href="{% url 'crm:company_detail' m.company.pk %}">{{ m.company.name }}</a>{% if m.role %} — {{ m.role }}{% endif %}</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="muted">No company memberships yet.</p>
+{% endif %}
+<p><a href="{% url 'crm:membership_create' %}?person={{ person.pk }}" class="button-link">+ Link to company</a></p>
+
+<h3>Recent interactions</h3>
+{% if recent_interactions %}
+  <ul>
+    {% for i in recent_interactions %}
+      <li>
+        <strong>{{ i.date }}</strong> — {{ i.get_channel_display }}
+        {% if i.company %} with <a href="{% url 'crm:company_detail' i.company.pk %}">{{ i.company.name }}</a>{% endif %}
+        {% if i.notes %}<br><span class="meta">{{ i.notes|linebreaksbr }}</span>{% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="muted">No interactions logged yet.</p>
+{% endif %}
+<p><a href="{% url 'crm:interaction_create' %}?person={{ person.pk }}" class="button-link">+ Log interaction</a></p>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "crm/base.html" %}
+
+{% block title %}Link to company · Ties{% endblock %}
+
+{% block content %}
+<nav class="breadcrumbs">
+  {% if person %}<a href="{% url 'crm:person_detail' person.pk %}">{{ person.name }}</a> /{% endif %}
+  Link to company
+</nav>
+
+<h1>Link {{ person.name|default:"person" }} to a company</h1>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Save</button>
+  {% if person %}<a href="{% url 'crm:person_detail' person.pk %}" style="margin-left: 1rem;">Cancel</a>{% endif %}
+</form>
+{% endblock %}

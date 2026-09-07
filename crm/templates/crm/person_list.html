@@ -1,0 +1,33 @@
+{% extends "crm/base.html" %}
+
+{% block title %}People · Ties{% endblock %}
+
+{% block content %}
+<h1>People</h1>
+
+{% if people %}
+<table>
+  <thead>
+    <tr><th>Name</th><th>Email</th><th>Tags</th><th>Companies</th></tr>
+  </thead>
+  <tbody>
+    {% for p in people %}
+    <tr>
+      <td><a href="{% url 'crm:person_detail' p.pk %}">{{ p.name }}</a></td>
+      <td>{{ p.email|default:"—" }}</td>
+      <td>
+        {% for t in p.tags.all %}<span class="tag">{{ t.name }}</span>{% empty %}<span class="muted">—</span>{% endfor %}
+      </td>
+      <td>
+        {% for m in p.memberships.all %}
+          <span class="pill">{{ m.company.name }}</span>
+        {% empty %}<span class="muted">—</span>{% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">No people yet. <a href="{% url 'crm:person_create' %}">Add your first contact</a>.</p>
+{% endif %}
+{% endblock %}
