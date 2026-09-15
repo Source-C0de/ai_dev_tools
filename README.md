@@ -82,3 +82,6 @@ scripts/
 
 6. **Which command runs the tests in the terminal?**
    **`pytest`** (run via `uv run pytest` in this project)
+
+7. Make file command.
+
